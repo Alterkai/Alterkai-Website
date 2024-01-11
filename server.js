@@ -182,15 +182,7 @@ app.get('/judul/:judul', async (req, res) => {
         const isLoggedIn = req.isAuthenticated();  // Mengecek apakah pengguna sudah masuk atau tidak
         const username = isLoggedIn ? req.user.username : null;  // Mengambil username jika pengguna sudah masuk, null jika belum
 
-        // Lakukan apa yang diperlukan dengan nilai judul, misalnya dapatkan detail dari database
-        // Contoh: const [results] = await db.execute('SELECT * FROM judul WHERE nama = ?', [judul]);
-        const [results] = await db.execute(`
-        SELECT *
-        FROM judul AS j
-        LEFT JOIN chapter AS c ON j.id = c.judul_id
-        LEFT JOIN gambar AS g ON c.id = g.chapter_id
-        WHERE j.nama = ?
-        `, [judul]);
+        const [results] = await db.execute('SELECT * FROM judul AS j LEFT JOIN chapter AS c ON j.id = c.judul_id LEFT JOIN gambar AS g ON c.id = g.chapter_id WHERE j.nama = ? GROUP BY g.chapter_id', [judul]);
 
         const formattedResults = results.map(result => {
             return {
@@ -202,12 +194,14 @@ app.get('/judul/:judul', async (req, res) => {
             };
         });
         // Kirim data yang diperlukan ke halaman render
-        res.render('baca', { judul: formattedResults, isLoggedIn, username }); // Ubah sesuai kebutuhan aplikasi Anda
+        res.render('judul', { judul: formattedResults, isLoggedIn, username }); // Ubah sesuai kebutuhan aplikasi Anda
     } catch (error) {
         console.error('Error fetching judul details from MySQL:', error);
         res.status(500).send('Internal Server Error');
     }
 });
+
+
 
 app.get('/tambah-manga',checkAuthenticated, (req, res) => {
     res.render('tambah-manga', { message: null});
@@ -237,17 +231,19 @@ app.get('/tambah-chapter/:judul', checkAuthenticated, async (req, res) => {
       const judul = results[0];
   
       // Render the 'tambah-chapter' page with judul data, including the 'id' property
-      res.render('tambah-chapter', { message: null, judul });
+      res.render('tambah-chapter.ejs', { message: null, judul });
     } catch (error) {
       console.error(error);
       res.status(500).send('Internal Server Error');
     }
-  });
-  
+});
 
   app.post('/tambah-chapter/:judul', checkAuthenticated, async (req, res) => {
     try {
         const { chapter, link_gambar, judul_id } = req.body;
+        const judul = req.params.judul;
+
+        const imageUrls = extractImageURLs(link_gambar);
 
         // Langkah 1: Sisipkan data ke dalam tabel "chapter"
         const [chapterResult] = await db.execute('INSERT INTO chapter (chapter, judul_id) VALUES (?, ?)', [chapter, judul_id]);
@@ -256,15 +252,57 @@ app.get('/tambah-chapter/:judul', checkAuthenticated, async (req, res) => {
         const newChapterId = chapterResult.insertId;
 
         // Langkah 2: Sisipkan data ke dalam tabel "gambar" dengan merujuk pada ID chapter yang baru
-        await db.execute('INSERT INTO gambar (link_gambar, chapter_id, judul_id) VALUES (?, ?, ?)', [link_gambar, newChapterId, judul_id]);
-        res.render('tambah-chapter', { message: null, judul });
+        if (Array.isArray(imageUrls)) {
+            // If link_gambar is an array, iterate through the array and insert each link
+            for (const link of imageUrls) {
+                await db.execute('INSERT INTO gambar (link_gambar, chapter_id, judul_id) VALUES (?, ?, ?)', [link, newChapterId, judul_id]);
+            }
+        } else {
+            // If link_gambar is not an array, insert a single link
+            await db.execute('INSERT INTO gambar (link_gambar, chapter_id, judul_id) VALUES (?, ?, ?)', [imageUrls, newChapterId, judul_id]);
+        }
+
+        res.render('tambah-chapter.ejs', { message: null, judul });
     } catch (error) {
         console.error(error);
-        // Handle kesalahan dan kirim respons kesalahan ke pengguna
         res.status(500).send('Internal Server Error');
     }
 });
 
+app.get('/:judul/:chapter_id', async (req, res) => {
+    const judul = req.params.judul;
+    const chapter_id = req.params.chapter_id;
+    try {
+        const [results] = await db.execute('select * from gambar as g left join judul as j on j.id = g.judul_id where j.nama = ? and g.chapter_id = ?;', [judul, chapter_id]);
+        const nama = req.params.judul;
+        const chapter = req.params.chapter_id;
+        const formattedResults = results.map(result => {
+            return {
+                judul: result.nama,
+                imageUrl: result.link_gambar,
+                chapter_id: result.chapter_id, // Ambil chapter_id dari tabel gambar
+            };
+        });
+
+        res.render('baca', { judul: formattedResults, nama, chapter })
+    } catch (error) {
+        console.error(error);
+    }
+})
+
+
+function extractImageURLs(inputText) {
+  
+    const regex = /\[IMG\](.*?)\[\/IMG\]/g;
+    const imageUrls = [];
+    
+    let match;
+    while ((match = regex.exec(inputText)) !== null) {
+      imageUrls.push(match[1]);
+    }
+  
+    return imageUrls;
+  }
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

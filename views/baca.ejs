@@ -7,21 +7,21 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="container d-flex flex-column justify-content-center" style="height: 100vh;">
-        <h1><%= judul[0].nama %></h1>
-        <p><%= judul[0].keterangan %></p>
-        <% judul.forEach(judul => { %>
-            <a href="/<%= judul.nama %>/<%= judul.chapterId %>" style="text-decoration: none;">
-                <h4><%= judul.chapter %></h4>
-            </a>
-        <% }); %> 
-        <% if(isLoggedIn) { %>
-            <a href="/tambah-chapter/<%= judul[0].nama %>">
-                <button class="btn btn-primary">Tambah chapter baru</button>
-            </a>
-        <% } %>
-    </div>    
+    <div class="container" style="padding-top: 30px;">
+        <div class="d-flex justify-content-center">
+            <h3>Baca : <%= nama %> Ch. <%= chapter %></h3>
+        </div>
     
+        <div class="text-center">
+            <% judul.forEach(item => { %>
+                <div class="w-100">
+                    <img src="<%= item.imageUrl %>" alt="Image" class="img-fluid">
+                </div>
+            <% }); %>
+        </div>
+    </div>
+    
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>
