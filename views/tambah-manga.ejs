@@ -18,22 +18,28 @@
                 <%= message %>
             </div>
         <% } %>
-        <div class="d-flex justify-content-center flex-column" style="height: 100vh;">
+        <div class="d-flex flex-column justify-content-center" style="height: 100vh; width: 100%;">
             <h1>Tambah manga</h1>
-            <form action="/tambah-manga" method="post">
-                <div class="form-group">
-                    <input type="text" name="nama" placeholder="Judul Manga">
-                </div>
-                <div class="form-group">
-                    <input type="text" name="keterangan" placeholder="Keterangan">
-                </div>
-                <div class="form-group">
-                    <input type="text" name="thumbnail" placeholder="link cover">
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="submit" class="btn btn-primary">
-                </div>
-            </form>
+            <div class="d-flex flex-row">
+                <form action="/tambah-manga" method="post">
+                    <div class="form-group">
+                        <input type="text" name="nama" placeholder="Judul Manga">
+                    </div>
+                    <div class="form-group">
+                        <textarea type="text" name="keterangan" placeholder="Keterangan" style="height: 300px;"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="genre" placeholder="genre">
+                        <p style="padding: 0; margin: 0;">jika lebih dari satu, pisahkan genre dengan koma</p>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="thumbnail" placeholder="link cover">
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="submit" class="btn btn-primary">
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 

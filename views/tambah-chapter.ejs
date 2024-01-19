@@ -26,6 +26,7 @@
             <h4><%= judul.nama %></h4>
             <form action="/tambah-chapter/:judul" method="post">
                 <input type="hidden" name="judul_id" value="<%= judul.id %>">
+                <input type="hidden" name="judul" value="<%= namaJudul %>">
                 <div class="form-group">
                     <input type="text" name="chapter" placeholder="Nomor Chapter">
                 </div>

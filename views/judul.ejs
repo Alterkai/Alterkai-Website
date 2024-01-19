@@ -5,22 +5,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Document</title>
+    <style>
+        p,h1{
+            margin: 0;
+            color: white;
+        }
+        .chapter:hover{
+            background-color: #1D181D;
+            color: white;
+            fill: white;
+        }
+        .chapter{
+            background-color: #EDE9E4;
+            color: black;
+            fill: black;
+        }
+        span{
+            margin: 0;
+        }
+        .parallax-container{
+            position: relative;
+            height: 100vh; /* Sesuaikan tinggi div sesuai kebutuhan */
+            overflow: hidden;
+            background: url('<%= formattedResults[0].thumbnail %>') center/cover no-repeat; /* Ganti 'your-image.jpg' dengan path gambar Anda */
+        }
+        .blur{
+            backdrop-filter: brightness(30%) blur(2rem);
+        }
+    </style>
 </head>
 <body>
-    <div class="container d-flex flex-column justify-content-center" style="height: 100vh;">
-        <h1><%= judul[0].nama %></h1>
-        <p><%= judul[0].keterangan %></p>
-        <% judul.forEach(chapterId => { %>
-            <a href="/<%= chapterId.nama %>/<%= chapterId.chapterId %>" style="text-decoration: none;" class="btn border">
-                <h4><%= chapterId.chapter %></h4>
-            </a>
-        <% }); %> 
-        <% if(isLoggedIn) { %>
-            <a href="/tambah-chapter/<%= judul[0].nama %>">
-                <button class="btn btn-primary">Tambah chapter baru</button>
-            </a>
-        <% } %>
-    </div>    
+    <div class="parallax-container" style="height: 75vh;">
+        <div class="blur d-flex flex-column justify-content-center" style="height: 75vh;">
+            <div class="d-flex flex-row container" style="margin-top: auto;">
+                <img src="<%= formattedResults[0].thumbnail %>" alt="" style="height: 300px;">
+                <div class="" style="margin-top:auto; padding-left: 20px;">
+                    <div class="d-flex flex-row">
+                        <% genre.forEach(genre => { %>
+                            <span class="rounded" style="font-weight: 600; background-color: #2b2d42; color: white; padding: 3px 5px 3px 5px; margin-right: 10px;">
+                                <%= genre.genre %>
+                            </span>
+                        <% }) %>
+                    </div>
+                    <h1 style="word-wrap: break-word; overflow-wrap: break-word; font-size: 3rem; width: 30rem; font-weight: bold; padding-bottom: 10px;"><%= judul %></h1>
+                    <button class="btn" style="background-color: #0E4B80; fill: white; color: white; margin-right: 5px;">
+                        <p style="font-weight: 600;">Bookmark</p>
+                    </button>
+                    <% if(isLoggedIn) { %>
+                        <a href="/tambah-chapter/<%= formattedResults[0].nama %>">
+                            <button class="btn btn-primary" style="fill: white;">
+                                <p style="font-weight: 600;">Tambah Chapter</p>
+                            </button>
+                        </a>
+                        <a href="/tambah-genre/<%= formattedResults[0].nama %>">
+                            <button class="btn btn-primary" style="fill: white;">
+                                <p style="font-weight: 600;">Tambah Genre</p>
+                            </button>
+                        </a>
+                    <% } %>
+                </div>
+                
+            </div>
+            <div class="overflow-auto container" style="height: 100px; margin-top: 20px; margin-bottom: 20px;">
+                <p style="letter-spacing: -0.35px;"><%= formattedResults[0].keterangan %></p>
+            </div>
+        </div>
+    </div>
+    <div style="height: 50vh;">
+        <div class="container overflow-auto" style="padding-top: 30px;">
+            <div class="d-flex flex-row">
+                <h4>Chapter</h4>
+            </div>
+            <% formattedResults.forEach(chapter => { %>
+                <div style="padding-top: 20px;">
+                    <a href="/<%= chapter.nama %>/<%= chapter.chapter %>" style="text-decoration: none; text-align: left;">
+                        <div class="chapter d-flex flex-row rounded align-items-center" style="padding: 10px;">
+                            <span style="padding: 10px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="20" width="18" viewBox="0 0 576 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M249.6 471.5c10.8 3.8 22.4-4.1 22.4-15.5V78.6c0-4.2-1.6-8.4-5-11C247.4 52 202.4 32 144 32C93.5 32 46.3 45.3 18.1 56.1C6.8 60.5 0 71.7 0 83.8V454.1c0 11.9 12.8 20.2 24.1 16.5C55.6 460.1 105.5 448 144 448c33.9 0 79 14 105.6 23.5zm76.8 0C353 462 398.1 448 432 448c38.5 0 88.4 12.1 119.9 22.6c11.3 3.8 24.1-4.6 24.1-16.5V83.8c0-12.1-6.8-23.3-18.1-27.6C529.7 45.3 482.5 32 432 32c-58.4 0-103.4 20-123 35.6c-3.3 2.6-5 6.8-5 11V456c0 11.4 11.7 19.3 22.4 15.5z"/></svg>
+                            </span>
+                            <div class="d-flex flex-column" style="padding-left: 10px;">
+                                <span style="font-weight: 600; font-size: large;">
+                                    <%= chapter.chapter %>
+                                </span>
+                                <span style="font-size: smaller;">
+                                    <% let formattedDate = new Date(chapter.tanggal); %>
+                                    <%= formattedDate.toLocaleDateString('id-ID', { day:'numeric', month: 'long', year: 'numeric' }) %>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            <% }); %>
+
+            
+        </div>
+    </div>
+    
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>

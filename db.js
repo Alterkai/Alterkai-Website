@@ -5,7 +5,7 @@ const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'alterkai2', // Ganti 'nama_database' dengan nama database yang Anda gunakan
+  database: 'alterkai', // Ganti 'nama_database' dengan nama database yang Anda gunakan
   connectionLimit: 10,
 });
 

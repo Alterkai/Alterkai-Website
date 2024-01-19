@@ -4,23 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script async defer src="https://cdn.remark42.com/remark42.js"></script>
     <title>Document</title>
+    <style>
+        .floating-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px;
+            background-color: #0E4B80;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        } 
+        img{
+            width: 60vw;
+        }
+        @media only screen and (max-width: 767px) {
+            img{
+                width: 100%;
+            }
+        } 
+    </style>
 </head>
 <body>
-    <div class="container" style="padding-top: 30px;">
-        <div class="d-flex justify-content-center">
-            <h3>Baca : <%= nama %> Ch. <%= chapter %></h3>
+    <div class="d-flex justify-content-center align-items-center" style="background-color: #0E4B80; height: 100px;">
+        <div class="container d-flex justify-content-center align-items-center">
+            <h3 style="color: white;"><%= nama %> <%= chapter %></h3>
         </div>
-    
+    </div>
+
+    <div class="container" style="padding-top: 30px;">
+
         <div class="text-center">
-            <% judul.forEach(item => { %>
+            <% formattedResults.forEach(item => { %>
                 <div class="w-100">
-                    <img src="<%= item.imageUrl %>" alt="Image" class="img-fluid">
+                    <img src="<%= item.imageUrl %>" alt="Image" class="img-fluid" loading="lazy">
                 </div>
             <% }); %>
         </div>
+
+        <div id="remark42"></div>
+
     </div>
-    
+    <% if(cleanNext !== null){ %>
+        <a href="/<%= nama %>/<%= cleanNext %>" class="floating-button btn">
+            Next
+        </a>
+    <% }; %>
+
+    <script>
+        var remark_config = {
+          host: 'http://localhost:8080',
+          site_id: 'remark42',
+        }
+    </script>
+    <script>!function(e,n){for(var o=0;o<e.length;o++){var r=n.createElement("script"),c=".js",d=n.head||n.body;"noModule"in r?(r.type="module",c=".mjs"):r.async=!0,r.defer=!0,r.src=remark_config.host+"/web/"+e[o]+c,d.appendChild(r)}}(remark_config.components||["embed"],document);</script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>

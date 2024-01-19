@@ -6,14 +6,16 @@ CREATE TABLE genre (
 CREATE TABLE judul (
     id         INT AUTO_INCREMENT PRIMARY KEY,
     nama       VARCHAR(50) NOT NULL,
-    keterangan VARCHAR(255) NOT NULL,
-    thumbnail  VARCHAR(50)
+    keterangan TEXT NOT NULL,
+    thumbnail  VARCHAR(255)
 );
 
 CREATE TABLE chapter (
     id       INT AUTO_INCREMENT PRIMARY KEY,
     chapter  VARCHAR(20) NOT NULL,
     judul_id INT NOT NULL,
+    urutan   INT,
+    tanggal_dibuat TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (judul_id) REFERENCES judul (id) ON DELETE CASCADE
 );
 
@@ -22,18 +24,28 @@ CREATE TABLE gambar (
     link_gambar VARCHAR(100) NOT NULL,
     chapter_id  INT NOT NULL,
     judul_id    INT NOT NULL,
+ 
     FOREIGN KEY (chapter_id) REFERENCES chapter (id) ON DELETE CASCADE,
     FOREIGN KEY (judul_id) REFERENCES judul (id) ON DELETE CASCADE
 );
 
 
-CREATE TABLE relation_3 (
+CREATE TABLE genre_judul (
     genre_id   INT NOT NULL,
-    chapter_id INT NOT NULL,
-    PRIMARY KEY (genre_id, chapter_id),
-    FOREIGN KEY (chapter_id) REFERENCES chapter (id) ON DELETE CASCADE,
+    judul_id INT NOT NULL,
+    PRIMARY KEY (genre_id, judul_id),
+    FOREIGN KEY (judul_id) REFERENCES judul (id) ON DELETE CASCADE,
     FOREIGN KEY (genre_id) REFERENCES genre (id) ON DELETE CASCADE
 );
+
+create table view_count (
+    id int AUTO_INCREMENT PRIMARY KEY,
+    count int default 0,
+    judul_id int null,
+    chapter_id int null,
+    FOREIGN key (judul_id) REFERENCES judul (id) on delete CASCADE,
+    FOREIGN key (chapter_id) REFERENCES chapter (id) on delete cascade
+)
 
 
 CREATE TABLE users (
