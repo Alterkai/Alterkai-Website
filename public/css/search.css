@@ -1,0 +1,46 @@
+body p div{
+    margin: 0;
+}
+.container{
+    padding-top: 10vh;
+}
+.thumbnail{
+    height: 130px;
+}
+a{
+    text-decoration: none;
+}
+.hasil{
+    background-color: #e9ecef;
+    padding: 20px;
+}
+.keterangan{
+    height: 60px;
+}
+.judul-keterangan{
+    color: black;
+    padding-left: 20px;
+    margin-top: auto;
+}
+.genre {
+    font-weight: 600;
+    font-size: small;
+    background-color: gray;
+    color: white;
+    padding: 2px 4px 2px 4px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+.search-box{
+    padding: 20px 0 20px 0;
+}
+.tombol{
+    margin-left: 10px;
+    height: 40px;
+    width: 40px;
+    fill: white;
+    background-color: #1D181D;
+    outline-color: transparent;
+}
+p{font-size: small;}
+h4{font-weight: medium; font-size: 1.75rem;}

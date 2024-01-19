@@ -1,0 +1,41 @@
+div{
+    width: 100%;
+}
+p,h1{
+    margin: 0;
+    color: white;
+}
+.chapter:hover{
+    background-color: #1D181D;
+    color: white;
+    fill: white;
+}
+.chapter{
+    background-color: #EDE9E4;
+    color: black;
+    fill: black;
+}
+span{
+    margin: 0;
+}
+.parallax-container{
+    position: relative;
+    height: 100vh; 
+    overflow: hidden;
+    
+}
+.blur{
+    backdrop-filter: brightness(30%) blur(2rem);
+}
+.judul{padding-left: 10px;}
+.thumbnail{
+    height: 300px;
+}
+.title{word-wrap: break-word; overflow-wrap: break-word; font-size: 3rem; width: 100%; font-weight: bold; padding-bottom: 10px;}
+@media only screen and (max-width: 767px){
+    .thumbnail{height: 0;}
+    .blur{backdrop-filter: brightness(30%);background: linear-gradient(transparent, black);}
+    .judul{padding: 0;}
+    .title{font-size: 2.5rem;}
+    .container{padding-left: 20px;padding-right: 20px;}
+}
