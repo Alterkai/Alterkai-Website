@@ -83,8 +83,16 @@ app.use(passport.session());
 
 app.get('/', async (req, res) => {
     try {
-        const [results] = await db.execute('SELECT * FROM judul');
-        
+        const [resultsRaw] = await db.execute(`select group_concat(g.nama) as 'genre', j.nama as 'judul', j.keterangan as 'keterangan', j.thumbnail as 'thumbnail' from judul as j left join genre_judul as gj on gj.judul_id = j.id left join genre as g on g.id = gj.genre_id group by j.nama;`);
+        const results = resultsRaw.map(result => {
+            return {
+                nama: result.judul,
+                keterangan: result.keterangan,
+                thumbnail: result.thumbnail,
+                genre: result.genre
+            }
+        })
+
         // Tambahkan informasi apakah pengguna sudah masuk atau tidak
         const isLoggedIn = req.isAuthenticated();  // Mengecek apakah pengguna sudah masuk atau tidak
         const username = isLoggedIn ? req.user.username : null;  // Mengambil username jika pengguna sudah masuk, null jika belum
@@ -95,6 +103,22 @@ app.get('/', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
+app.get('/search', async (req, res) => {
+    res.render('search.ejs')
+})
+
+app.post('/search', async (req, res) => {
+    try {
+        const {judul} = req.body;
+
+        const [result] = await db.execute(`select group_concat(g.nama) as 'genre', j.nama, j.keterangan, j.thumbnail from judul as j left join genre_judul as gj on gj.judul_id = j.id left join genre as g on g.id = gj.genre_id where lower(j.nama) like lower(?) group by j.nama;`, ['%' + judul + '%']);
+
+        res.render('search', {result})
+    } catch (error) {
+        console.error(error)
+    }
+})
 
 app.get('/register', (req, res) => {
     res.render('register');
@@ -188,7 +212,7 @@ app.get('/tambah-manga',checkAuthenticated, (req, res) => {
     res.render('tambah-manga', { message: null});
 })
 
-app.post('/tambah-manga', async (req, res) => {
+app.post('/tambah-manga', checkAuthenticated, async (req, res) => {
     try {
         const { nama, keterangan, thumbnail, genre } = req.body;
         console.log(genre);

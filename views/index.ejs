@@ -6,124 +6,111 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="/css/index.css">
   <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
   <title>Alterkai.</title>
   <style>
-    h1,h2,h3,h4{
-      font-family: 'Bitter', serif;
-    }
-    p{
-      font-weight: 600;
-    }
-    .swiper {
-      width: 600px;
-      height: 300px;
-    }
+    
   </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 </head>
 <body>
-  <div class="" style="padding-left: 20px; padding-right: 20px; padding-bottom: 10px; padding-top: 10px; background-color: white;">
-    <div class="navbar navbar-expand-md navbar-light">
-      <a class="navbar-brand" href="/">
-        <h4 style="font-weight: bold; color: #0E4B80;">Alterkai.</h4>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav ms-auto" style="padding-right: 10px;">
-          <li class="nav-item btn btn-m">
-            <a class="nav-link" href="/">Placeholder</a>
-          </li>
-          <% if(isLoggedIn) { %>
-            <li class="nav-item btn">
-              <a href="/tambah-manga">
-                <button class="btn btn-primary">Tambah manga baru</button>
-              </a>
-            </li>
-          <% } %>
-          <li class="nav-item btn">
-            <a href="/login" class="btn btn-outline-success">Login</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-
-    <div class="" style=" background-color: #1D181D; width: 100%; padding: 20px;">
-      <div class="container">
-        <div class="d-flex flex-row align-items-center" style="color: white; fill: white;">
-          <svg xmlns="http://www.w3.org/2000/svg" height="30" width="18" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M159.3 5.4c7.8-7.3 19.9-7.2 27.7 .1c27.6 25.9 53.5 53.8 77.7 84c11-14.4 23.5-30.1 37-42.9c7.9-7.4 20.1-7.4 28 .1c34.6 33 63.9 76.6 84.5 118c20.3 40.8 33.8 82.5 33.8 111.9C448 404.2 348.2 512 224 512C98.4 512 0 404.1 0 276.5c0-38.4 17.8-85.3 45.4-131.7C73.3 97.7 112.7 48.6 159.3 5.4zM225.7 416c25.3 0 47.7-7 68.8-21c42.1-29.4 53.4-88.2 28.1-134.4c-4.5-9-16-9.6-22.5-2l-25.2 29.3c-6.6 7.6-18.5 7.4-24.7-.5c-16.5-21-46-58.5-62.8-79.8c-6.3-8-18.3-8.1-24.7-.1c-33.8 42.5-50.8 69.3-50.8 99.4C112 375.4 162.6 416 225.7 416z"/></svg>
-          <h3 style="margin: 0;">Yang Lagi Trending</h3>   
+    <div style="z-index: 3; position: absolute; width: 100%;">
+      <div class="header container d-flex justify-content-between">
+        <h4 style="color: white; font-family: 'bitter', 'serif';">Alterkai Scans.</h4>
+        <div>
+          <form action="/search" method="post">
+            <input type="text" name="judul" id="" placeholder="Cari Manga" style="background-color: transparent;" class="form-control">
+          </form>
         </div>
-        <div class="d-flex overflow-auto" style=" width: 100%;">
-          <% judul.forEach(judul => { %>
-            <div class="d-flex flex-column align-items-start" style="padding: 10px;">
-                <a href="/<%= judul.nama %>">
-                <!-- Tampilkan thumbnail jika tersedia -->
-                <% if(judul.thumbnail) { %>
-                    <img src="<%= judul.thumbnail %>" alt="Thumbnail" style="width: 200px;">
-                <% } %>
-                </a>
-                <p style="color: white; word-wrap: break-word; overflow-wrap: break-word; width: 200px;"><%= judul.nama %></p>
-            </div>
-          <% }); %>
-      </div>
       </div>
     </div>
 
-    <!-- Slider main container -->
-    <div class="swiper">
-      <!-- Additional required wrapper -->
-      <div class="swiper-wrapper">
-        <!-- Slides -->
-        <% judul.forEach(judul => { %>
-          <div class="swiper-slide">
-            <img src="<%= judul.thumbnail %>" alt="">
+
+    <div class="" style=" background-color: #1D181D; width: 100%;">
+      <div class="">
+        <div class="swiper">
+
+          <div class="swiper-wrapper">
+            <% judul.forEach(judul => { %>
+              <a href="/<%= judul.nama %>" class="swiper-slide blur-container d-flex align-items-center justify-content-center" style="background: url('<%= judul.thumbnail %>') center/cover no-repeat;">
+                <div class="blur d-flex align-items-end" style="padding-bottom: 2rem;">
+                  <div class="container d-flex flex-row align-items-end">
+                    <img class="thumbnail" src="<%= judul.thumbnail %>" alt="">
+                    <div class="text-container d-flex flex-column text-wrap">
+                      <h1 class="judul" style=""><%= judul.nama %></h1>
+                      <% if(judul.genre){ %>
+                        <div class="d-flex flex-row flex-wrap" style="padding-bottom: 10px;">
+                          <% judul.genre.split(',').forEach(singleGenre => { %>
+                            <div class="genre rounded">
+                              <%= singleGenre.trim() %>
+                            </div>
+                          <% }) %>
+                        </div>
+                      <% } %> 
+                      <p class="keterangan overflow-auto"><%= judul.keterangan %></p>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            <%  }); %>
           </div>
-        <%  }); %>
-        <div class="swiper-slide">Slide 1</div>
-        <div class="swiper-slide">Slide 2</div>
-        <div class="swiper-slide">Slide 3</div>
+    
+          <div class="swiper-pagination"></div>
+    
+        </div>
       </div>
-      <!-- If we need pagination -->
-      <div class="swiper-pagination"></div>
-
-      <!-- If we need navigation buttons -->
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-button-next"></div>
-
-      <!-- If we need scrollbar -->
-      <div class="swiper-scrollbar"></div>
+      
     </div>
+
+    <div class="container">
+      <div class="d-flex flex-row align-items-center" style="color: black; fill: white; width: 100%; height: auto;">
+        <svg xmlns="http://www.w3.org/2000/svg" height="30" width="18" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M159.3 5.4c7.8-7.3 19.9-7.2 27.7 .1c27.6 25.9 53.5 53.8 77.7 84c11-14.4 23.5-30.1 37-42.9c7.9-7.4 20.1-7.4 28 .1c34.6 33 63.9 76.6 84.5 118c20.3 40.8 33.8 82.5 33.8 111.9C448 404.2 348.2 512 224 512C98.4 512 0 404.1 0 276.5c0-38.4 17.8-85.3 45.4-131.7C73.3 97.7 112.7 48.6 159.3 5.4zM225.7 416c25.3 0 47.7-7 68.8-21c42.1-29.4 53.4-88.2 28.1-134.4c-4.5-9-16-9.6-22.5-2l-25.2 29.3c-6.6 7.6-18.5 7.4-24.7-.5c-16.5-21-46-58.5-62.8-79.8c-6.3-8-18.3-8.1-24.7-.1c-33.8 42.5-50.8 69.3-50.8 99.4C112 375.4 162.6 416 225.7 416z"/></svg>
+        <h3 style="margin: 0;">Yang Lagi Trending</h3>   
+      </div>
+      <div class="d-flex overflow-auto" style=" width: 100%;">
+        <% judul.forEach(judul => { %>
+          <div class="d-flex flex-column align-items-start" style="padding: 10px;">
+              <a href="/<%= judul.nama %>">
+              <!-- Tampilkan thumbnail jika tersedia -->
+              <% if(judul.thumbnail) { %>
+                  <img src="<%= judul.thumbnail %>" alt="Thumbnail" style="width: 200px;">
+              <% } %>
+              </a>
+              <p style="color: black; width: 200px;" class="text-wrap"><%= judul.nama %></p>
+          </div>
+        <% }); %>
+    </div>
+    </div>
+
+
+    
   
-  <script>
-    const swiper = new Swiper('.swiper', {
-      // Optional parameters
-      direction: 'vertical',
-      loop: true,
-
-      // If we need pagination
-      pagination: {
-        el: '.swiper-pagination',
-      },
-
-      // Navigation arrows
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-
-      // And if we need scrollbar
-      scrollbar: {
-        el: '.swiper-scrollbar',
-      },
-    });
-  </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const swiper = new Swiper('.swiper', {
+          direction: 'horizontal',
+          loop: true,
+          pagination: {
+            el: '.swiper-pagination',
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+          scrollbar: {
+            el: '.swiper-scrollbar',
+          },
+          autoplay: {
+            delay: 5000, 
+            disableOnInteraction: false,
+          },
+        });
+      });
+    </script>
+    
+    
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>

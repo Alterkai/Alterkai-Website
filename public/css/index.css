@@ -1,0 +1,73 @@
+.header{
+    padding-left: 50px; padding-top: 5vh; width: 100%; padding-right: 90px;
+}
+
+.white, input::placeholder, :focus::placeholder, input[type="text"], input[type="text"]:focus{
+    color: white !important;
+  }
+  a{
+    text-decoration: none;
+  }
+  h4{
+    font-family: 'Bitter', serif;
+  }
+  p{
+    font-weight: 600;
+  }
+  .swiper {
+    width: 100vw;
+  }
+  .swiper-slide {
+  width: 100%;
+  object-fit: cover;
+  }
+  .blur{
+    background: linear-gradient(transparent, black);
+    backdrop-filter: brightness(30%);
+  }
+  .swiper,.swiper-slide,.blur,.blur-container{
+    height: 60vh;
+    width: 100%;
+  }
+
+  .text-container{
+    padding-left:2rem;
+    padding-right: 4rem;
+  }
+  .genre {
+    font-weight: 600;
+    font-size: small;
+    background-color: #EDE9E4;
+    color: black;
+    padding: 2px 4px 2px 4px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+  .keterangan{
+    color: white;
+    font-weight: 400;
+    height: 100px;
+  }
+  .judul{
+    color: white; font-size: 3rem; font-weight: bold;
+  }
+  .thumbnail{
+    height: 40vh;
+  }
+  @media only screen and (max-width: 995px) {
+    .judul{
+        font-size: 2rem;
+    }
+    .thumbnail{
+        height: 40vh;
+    }
+  }
+  @media only screen and (max-width: 767px){
+    .thumbnail{height: 0;}
+    .header{
+        padding: 2rem 2rem 0 2rem;
+    }
+    .text-container{
+        padding-right: 2rem;
+    }
+  }

@@ -1,0 +1,47 @@
+<div class="" style="padding-left: 20px; padding-right: 20px; padding-bottom: 10px; padding-top: 10px; background-color: white;">
+    <div class="navbar navbar-expand-md navbar-light">
+      <a class="navbar-brand" href="/">
+        <h4 style="font-weight: bold; color: #0E4B80;">Alterkai.</h4>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav ms-auto" style="padding-right: 10px;">
+          <li class="nav-item btn btn-m">
+            <a class="nav-link" href="/">Placeholder</a>
+          </li>
+          <% if(isLoggedIn) { %>
+            <li class="nav-item btn">
+              <a href="/tambah-manga">
+                <button class="btn btn-primary">Tambah manga baru</button>
+              </a>
+            </li>
+          <% } %>
+          <li class="nav-item btn">
+            <a href="/login" class="btn btn-outline-success">Login</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+
+  for (const judulKey of Object.keys(juduls)) {
+    const [hasilRaw] = await db.execute(
+        `SELECT GROUP_CONCAT(g.nama) AS 'genre', j.nama AS 'judul', j.keterangan AS 'keterangan', j.thumbnail AS 'thumbnail' FROM judul AS j LEFT JOIN genre_judul AS gj ON gj.judul_id = j.id LEFT JOIN genre AS g ON g.id = gj.genre_id WHERE j.nama = ? GROUP BY j.nama;`,
+        [juduls]
+    );
+
+    console.log(judulKey)
+
+    const hasil = hasilRaw.map(hasil => ({
+        nama: hasil.nama,
+        keterangan: hasil.keterangan,
+        thumbnail: hasil.thumbnail,
+        genre: hasil.genre,
+    }));
+
+    hasilArray.push(...hasil);
+}

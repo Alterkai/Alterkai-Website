@@ -1,0 +1,23 @@
+body p div{
+    margin: 0;
+}
+.thumbnail{
+    height: 200px;
+}
+a{
+    text-decoration: none;
+}
+.hasil{
+    background-color: #EDE9E4;
+    padding: 20px;
+}
+.keterangan{
+    height: 100px;
+}
+.judul-keterangan{
+    color: black;
+    padding-left: 20px;
+    margin-top: auto;
+}
+p{font-size: small;}
+h4{font-weight: medium; font-size: 1.75rem;}
