@@ -10,15 +10,33 @@
 <body>
     <div style="height: 100vh; width: 100vw;">
         <div class="container">
-            <h1>Hasil Pencarian:</h1>
+            <h2>Hasil Pencarian</h2>
             <% if(result.length === 0){ %>
+                
                 <h4>Manga tidak ditemukan!</h4>
             <% } else { %>
+                <div class="search-box">
+                    <form action="/search" method="post">
+                        <div class="d-flex flex-row">
+                            <input type="text" name="judul" id="judul" value="<%= judul %>" placeholder="Cari manga" style="background-color: #e9ecef;" class="form-control">
+                            <button class="tombol btn" type="button" onclick="clearForm()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M376.6 84.5c11.3-13.6 9.5-33.8-4.1-45.1s-33.8-9.5-45.1 4.1L192 206 56.6 43.5C45.3 29.9 25.1 28.1 11.5 39.4S-3.9 70.9 7.4 84.5L150.3 256 7.4 427.5c-11.3 13.6-9.5 33.8 4.1 45.1s33.8 9.5 45.1-4.1L192 306 327.4 468.5c11.3 13.6 31.5 15.4 45.1 4.1s15.4-31.5 4.1-45.1L233.7 256 376.6 84.5z"/></svg></button>
+                        </div>
+                    </form>
+                </div>
                 <% result.forEach(result => { %>
-                    <a class="hasil d-flex flex-row align-items-center" style="width: 100%; height: auto;" href="/<%= result.nama %>">
+                    <a class="hasil rounded d-flex flex-row align-items-center" style="width: 100%; height: auto;" href="/<%= result.nama %>">
                         <img class="thumbnail" src="<%= result.thumbnail %>" alt="kover <%= result.nama %>">
                         <div class="judul-keterangan d-flex flex-column justify-content-end">
-                            <h4 class="text-wrap"><%= result.nama %></h4>
+                            <h4 class="text-wrap" style="font-size: 1.3rem;"><%= result.nama %></h4>
+                            <% if(result.genre){ %>
+                                <div class="d-flex flex-row flex-wrap">
+                                  <% result.genre.split(',').forEach(singleGenre => { %>
+                                    <div class="genre rounded">
+                                      <%= singleGenre.trim() %>
+                                    </div>
+                                  <% }) %>
+                                </div>
+                            <% } %> 
                             <p class="text-wrap keterangan overflow-auto" style="margin: 0;"><%= result.keterangan %></p>
                         </div>
                     </a>
@@ -27,6 +45,20 @@
         </div>
     </div>
 
+
+    <script>
+        function clearForm() {
+          // Mengambil elemen formulir dan elemen input
+          var form = document.getElementById('myForm');
+          var usernameInput = document.getElementById('judul');
+    
+          // Membersihkan nilai input
+          usernameInput.value = '';
+    
+          // Fokuskan kembali ke input setelah membersihkan
+          usernameInput.focus();
+        }
+      </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>

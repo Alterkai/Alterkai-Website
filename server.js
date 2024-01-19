@@ -114,7 +114,7 @@ app.post('/search', async (req, res) => {
 
         const [result] = await db.execute(`select group_concat(g.nama) as 'genre', j.nama, j.keterangan, j.thumbnail from judul as j left join genre_judul as gj on gj.judul_id = j.id left join genre as g on g.id = gj.genre_id where lower(j.nama) like lower(?) group by j.nama;`, ['%' + judul + '%']);
 
-        res.render('search', {result})
+        res.render('search', {result, judul})
     } catch (error) {
         console.error(error)
     }

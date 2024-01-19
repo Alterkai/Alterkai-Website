@@ -38,7 +38,7 @@
                   <div class="container d-flex flex-row align-items-end">
                     <img class="thumbnail" src="<%= judul.thumbnail %>" alt="">
                     <div class="text-container d-flex flex-column text-wrap">
-                      <h1 class="judul" style=""><%= judul.nama %></h1>
+                      <h1 class="judul"><%= judul.nama %></h1>
                       <% if(judul.genre){ %>
                         <div class="d-flex flex-row flex-wrap" style="padding-bottom: 10px;">
                           <% judul.genre.split(',').forEach(singleGenre => { %>
