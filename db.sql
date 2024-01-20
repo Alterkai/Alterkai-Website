@@ -7,7 +7,9 @@ CREATE TABLE judul (
     id         INT AUTO_INCREMENT PRIMARY KEY,
     nama       VARCHAR(50) NOT NULL,
     keterangan TEXT NOT NULL,
-    thumbnail  VARCHAR(255)
+    thumbnail  VARCHAR(255),
+    view       INT DEFAULT 0,
+    author     VARCHAR(255)
 );
 
 CREATE TABLE chapter (
@@ -15,6 +17,7 @@ CREATE TABLE chapter (
     chapter  VARCHAR(20) NOT NULL,
     judul_id INT NOT NULL,
     urutan   INT,
+    view     INT DEFAULT 0,
     tanggal_dibuat TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (judul_id) REFERENCES judul (id) ON DELETE CASCADE
 );
@@ -37,16 +40,6 @@ CREATE TABLE genre_judul (
     FOREIGN KEY (judul_id) REFERENCES judul (id) ON DELETE CASCADE,
     FOREIGN KEY (genre_id) REFERENCES genre (id) ON DELETE CASCADE
 );
-
-create table view_count (
-    id int AUTO_INCREMENT PRIMARY KEY,
-    count int default 0,
-    judul_id int null,
-    chapter_id int null,
-    FOREIGN key (judul_id) REFERENCES judul (id) on delete CASCADE,
-    FOREIGN key (chapter_id) REFERENCES chapter (id) on delete cascade
-)
-
 
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,

@@ -2,7 +2,7 @@ body p div{
     margin: 0;
 }
 .container{
-    padding-top: 10vh;
+    padding-top: 3rem;
 }
 .thumbnail{
     height: 130px;
@@ -44,3 +44,6 @@ a{
 }
 p{font-size: small;}
 h4{font-weight: medium; font-size: 1.75rem;}
+@media only screen and (max-width: 767px){
+    
+}

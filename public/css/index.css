@@ -46,13 +46,18 @@
   .keterangan{
     color: white;
     font-weight: 400;
-    height: 100px;
+    max-height: 100px;
   }
   .judul{
     color: white; font-size: 3rem; font-weight: bold;
   }
   .thumbnail{
     height: 40vh;
+  }
+  .latest{
+    margin-top: 30px;
+    padding: 10px 20px 10px 20px;
+    background-color: #e9ecef;
   }
   @media only screen and (max-width: 995px) {
     .judul{
