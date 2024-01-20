@@ -83,7 +83,7 @@ app.use(passport.session());
 
 app.get('/', async (req, res) => {
     try {
-        const [resultsRaw] = await db.execute(`select group_concat(g.nama) as 'genre', j.nama as 'judul', j.keterangan as 'keterangan', j.thumbnail as 'thumbnail' from judul as j left join genre_judul as gj on gj.judul_id = j.id left join genre as g on g.id = gj.genre_id group by j.nama;`);
+        const [resultsRaw] = await db.execute(`select group_concat(g.nama) as 'genre', j.nama as 'judul', j.keterangan as 'keterangan', j.thumbnail as 'thumbnail' from judul as j left join genre_judul as gj on gj.judul_id = j.id left join genre as g on g.id = gj.genre_id group by j.nama order by j.view asc limit 5;`);
         const results = resultsRaw.map(result => {
             return {
                 nama: result.judul,
@@ -93,11 +93,13 @@ app.get('/', async (req, res) => {
             }
         })
 
+        const [judulSemua] = await db.execute(`select nama, keterangan, thumbnail from judul`)
+
         // Tambahkan informasi apakah pengguna sudah masuk atau tidak
         const isLoggedIn = req.isAuthenticated();  // Mengecek apakah pengguna sudah masuk atau tidak
         const username = isLoggedIn ? req.user.username : null;  // Mengambil username jika pengguna sudah masuk, null jika belum
         
-        res.render('index', { judul: results, isLoggedIn, username });
+        res.render('index', { judul: results, isLoggedIn, username, judulSemua });
     } catch (error) {
         console.error('Error fetching judul from MySQL:', error);
         res.status(500).send('Internal Server Error');
@@ -214,9 +216,9 @@ app.get('/tambah-manga',checkAuthenticated, (req, res) => {
 
 app.post('/tambah-manga', checkAuthenticated, async (req, res) => {
     try {
-        const { nama, keterangan, thumbnail, genre } = req.body;
+        const { nama, keterangan, thumbnail, genre, author } = req.body;
         console.log(genre);
-        await db.execute('insert into judul (nama, keterangan, thumbnail) values (?, ?, ?)',[nama, keterangan, thumbnail]);
+        await db.execute('insert into judul (nama, keterangan, thumbnail, author) values (?, ?, ?, ?)',[nama, keterangan, thumbnail, author]);
 
         const genreMasuk = genre.split(',');
         const [judulIdRaw] = await db.execute('SELECT id FROM judul WHERE nama = ?', [nama]);
@@ -348,16 +350,21 @@ app.get('/:judul', async (req, res) => {
         // Dapatkan nilai parameter judul dari URL
         const judul = req.params.judul;        
 
+        const [viewRaw] = await db.execute('select view from judul where nama = ?', [judul]);
+        let view = viewRaw[0].view+1;
+        await db.execute('update judul set view = ? where nama = ?;', [view ,judul]);
+
         const isLoggedIn = req.isAuthenticated();  // Mengecek apakah pengguna sudah masuk atau tidak
         const username = isLoggedIn ? req.user.username : null;  // Mengambil username jika pengguna sudah masuk, null jika belum
 
         const [genre] = await db.execute(`select g.nama as 'genre', j.nama as 'judul' from judul as j join genre_judul as gj on gj.judul_id = j.id join genre as g on g.id = gj.genre_id where j.nama = ?;`,[judul]);
-        console.log(genre)
 
-        const [results] = await db.execute('SELECT chapter,nama,keterangan,thumbnail,link_gambar,chapter_id,date(tanggal_dibuat) as tanggal FROM judul AS j LEFT JOIN chapter AS c ON j.id = c.judul_id LEFT JOIN gambar AS g ON c.id = g.chapter_id WHERE j.nama = ? GROUP BY g.chapter_id', [judul]);
+        const [results] = await db.execute('SELECT c.view,author,chapter,nama,keterangan,thumbnail,link_gambar,chapter_id,date(tanggal_dibuat) as tanggal FROM judul AS j LEFT JOIN chapter AS c ON j.id = c.judul_id LEFT JOIN gambar AS g ON c.id = g.chapter_id WHERE j.nama = ? GROUP BY g.chapter_id', [judul]);
 
         const formattedResults = results.map(result => {
             return {
+                view: result.view,
+                author: result.author,
                 chapter: result.chapter,
                 nama: result.nama,
                 keterangan: result.keterangan,
@@ -382,6 +389,11 @@ app.get('/:judul/:chapter_id', async (req, res) => {
     try {
         const [results] = await db.execute('select * from gambar as g join judul as j on j.id = g.judul_id join chapter as c on c.id = g.chapter_id where j.nama = ? and c.chapter = ?;', [judul, chapter_id]);
         const nama = req.params.judul;
+        
+        const [viewRaw] = await db.execute('select view from chapter where chapter = ?', [chapter_id]);
+        let view = viewRaw[0].view+1;
+        await db.execute('update chapter set view = ? where chapter = ?',[view, chapter_id])
+        console.log(view);
 
         const [currentChapter] = await db.execute('SELECT c.urutan FROM judul AS j LEFT JOIN chapter AS c ON j.id = c.judul_id where j.nama = ? and c.chapter = ?', [nama, chapter_id]);
         const nextUrutan = currentChapter[0].urutan + 1;
