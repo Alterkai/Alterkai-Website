@@ -1,5 +1,4 @@
-This project is currently dropped as i will be focusing on developing Wordpress theme.
-
+This project is my first attempt at creating fullstack website using ExpressJS and EJS with a bit of MySQL. I was only at my first semester college, so pardon for the crappy code :P
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 
@@ -54,7 +53,7 @@ Change the token to suit your need.
 
 I didn't create any button that directly sends to login/register page. So you'll need to enter the address manually.
 
-Since this is yet to be released, i didn't configure a way to install required modules, so please install any required manually.
+do npm install to install any required modules
 ## Screenshots
 
 Desktop
